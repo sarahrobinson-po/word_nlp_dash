@@ -2,9 +2,9 @@ from collections import OrderedDict
 import pandas as pd
 import nltk
 import re
-import matplotlib
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
+#import matplotlib
+#matplotlib.use('TkAgg')
+#import matplotlib.pyplot as plt
 from nltk.corpus import wordnet as wn
 from operator import itemgetter
 from wordcloud import WordCloud
