@@ -14,6 +14,8 @@ import pickle
 
 nltk.data.path.append('./nltk_data/')
 nltk.download('wordnet')
+nltk.download('punkt')
+nltk.data.path.append('./nltk_data/')
 
 #load pickle file of custom stopwords
 with open('custom_stop.txt', 'rb') as f:
