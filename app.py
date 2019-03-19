@@ -10,7 +10,7 @@ import json
 import os
 import pandas as pd
 import numpy as np
-from util_script import phrase_voter, make_wordcloud
+from util_script import phrase_voter
 
 css_url = 'https://codepen.io/munyont/pen/XoeGae.css'
 css_bootstrap_url = 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css'
