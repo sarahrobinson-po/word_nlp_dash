@@ -13,6 +13,7 @@ import pickle
 from io import BytesIO
 import base64
 
+nltk.data.path.append('./nltk_data/')
 nltk.download('wordnet')
 
 #load pickle file of custom stopwords
