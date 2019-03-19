@@ -37,42 +37,6 @@ def tokenize_only(text):
                 filtered_tokens.append(token)
     return filtered_tokens
 
-def make_wordcloud(in_dict, title):
-    """
-    create a word cloud, and title it with the input text.
-
-    """
-    print("GETTING IN DICT FROM UTIL SCRIPT")
-    print(in_dict)
-    '''
-    d = in_dict
-    wordcloud = WordCloud(width = 400, height = 300, max_font_size = 100, max_words = 10,
-        background_color = 'white', colormap = "viridis")
-
-    freqs = wordcloud.generate_from_frequencies(frequencies=d)
-
-    print(freqs)
-
-    plt.figure(figsize= (10, 10))
-    plt.imshow(wordcloud, interpolation = 'bilinear')
-    plt.axis("off")
-    plt.margins(x=0, y=0)
-    plt.title(title)
-    '''
-
-
-def plt_to_uri(input_fig, close_all=True, **save_args):
-    out_img = BytesIO()
-    input_fig.savefig(out_img, format='png', **save_args)
-
-    if close_all:
-        input_fig.clf()
-        plt.close('all')
-
-    out_img.seek(0) # rewind file
-    encoded = base64.b64encode(out_img.read().decode("ascii").replace("\n", ""))
-    return "data:image/png;base64,{}".format(encoded)
-
 
 def phrase_voter(doc, return_dict = True):
 
@@ -159,8 +123,6 @@ def phrase_voter(doc, return_dict = True):
 
     if return_dict == True:
         return topn_dict
-    else:
-        make_wordcloud(topn_dict, doc)
 
 
 '''

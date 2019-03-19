@@ -49,11 +49,6 @@ app.layout = html.Div(className='',  children=[
             dcc.Graph(id='histogram-similar-phrase', style={'width': '1000px'}),
         ]),
 
-        html.Div(className='row', children=[
-            html.Img(id='wordcloud-similar-phrase', style={'width': '1000px'}),
-        ]),
-
-
     ]),
 
     html.Br(),
@@ -97,18 +92,6 @@ def histgram_run_input(n_clicks, input1):
 
     return go.Figure(data=[trace], layout=layout)
 
-@app.callback(Output('wordcloud-similar-phrase', 'src'),
-    [Input('submit-button', 'n_clicks')],
-    [State('input-1-state', 'value')])
-def wordcloud_run_input(n_clicks, input1):
-    print("RUNNING WORDCLOUD")
-    topn_dict = phrase_voter(input1, False)
-    print("TOPN DICT")
-    print(input1)
-    #wc = make_wordcloud(topn_dict, input1)
-
-    #print("OUT_URL")
-    #out_url = plt_to_uri(wc)
 
 if __name__ == '__main__':
     app.run_server(debug=True, port=5000)
