@@ -7,11 +7,10 @@ import re
 #import matplotlib.pyplot as plt
 from nltk.corpus import wordnet as wn
 from operator import itemgetter
-from wordcloud import WordCloud
 import numpy as np
 import pickle
-from io import BytesIO
-import base64
+#from io import BytesIO
+#import base64
 
 nltk.data.path.append('./nltk_data/')
 nltk.download('wordnet')
