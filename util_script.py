@@ -74,7 +74,7 @@ def phrase_voter(doc):
     
     #iterate though the tokens
     for token in tokens:
-        token_start = time.time()
+        
         
         first_phrase_choice = ''
         second_phrase_choice = ''
@@ -89,8 +89,7 @@ def phrase_voter(doc):
         
         #for each token, iterate though the phrases
         for phrase in ordered_keyphrases:
-            #print('for ', token, ', working on phrase: ', phrase)
-            #print("--- %s seconds ---" % (time.time()- start_time))
+            
             #reset similarity value to 0
             phrase_similarity = 0
             #for each word in that phrase, find the senses with the greatest similarity to the token
