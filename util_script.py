@@ -40,32 +40,44 @@ def tokenize_only(text):
     return filtered_tokens
 
 
-def phrase_voter(doc, return_dict = True):
-
+def phrase_voter(doc):
+    
     """
-    1. Tokenizes doc with tokenize_only function.
-
+    1. Tokenizes doc with tokenize_only function. 
+    
     2. Iterates through the tokens, and finds the phrase that it has the most in common with,
     the phrase with the highest, combined similarity recieves this tokens vote.
-    MAKE SURE KEY PHRASES ARE ORDERED FROM MOST LIKELY TO LEAST LIKELY, AS THE FIRST ONES ARE FAVORED.
-
-    3. Returns either a wordcloud, or a dictionary of the top 10 key phrases, depending on whether return_dict is set = True.
+    MAKE SURE KEY PHRASES ARE ORDERED FROM MOST LIKELY TO LEAST LIKELY, AS THE FIRST ONES ARE FAVORED. 
+    
+    3. Returns either a wordcloud, or a dictionary of the top 10 key phrases, depending on whether return_dict is set = True. 
+    
     """
+   
+    
     voters = tokenize_only(doc)
-
+    
     keyphrase_votes = {}
     tokens = [token for token in voters if token not in custom_stop]
-
+    
     #iterate though the tokens
     for token in tokens:
+        token_start = time.time()
+        
         first_phrase_choice = ''
         second_phrase_choice = ''
         third_phrase_choice = ''
         first_choice_value = 0
         second_choice_value = 0
         third_choice_value = 0
+        
+        token_synsets = []
+        for i, j in enumerate(wn.synsets(token)):
+            token_synsets.append(j)
+        
         #for each token, iterate though the phrases
         for phrase in ordered_keyphrases:
+            #print('for ', token, ', working on phrase: ', phrase)
+            #print("--- %s seconds ---" % (time.time()- start_time))
             #reset similarity value to 0
             phrase_similarity = 0
             #for each word in that phrase, find the senses with the greatest similarity to the token
@@ -74,21 +86,24 @@ def phrase_voter(doc, return_dict = True):
                 if keyword not in wn.words():
                     word_similarity = 2 if keyword == token else 0
                 #for each sense of token and keyword, find the similarity
-                for i, j in enumerate(wn.synsets(token)):
-                    for m, n in enumerate(wn.synsets(keyword)):
-                        similarity = j.path_similarity(n)
-                        similarity = 0 if similarity is None else similarity
-
+                else:
+                    for synset in token_synsets:
+                        for sense in synsets_dict[keyword]:
+                            similarity = synset.path_similarity(sense)
+                            similarity = 0 if similarity is None else similarity
+                        
                         #reassign word_similarity with the highest similarity value
-                        word_similarity = similarity if similarity > word_similarity else word_similarity
-
+                            word_similarity = similarity if similarity > word_similarity else word_similarity
+                
                 #once i've gotten the highest similarity value possible for that keyword add that value to the total phrase_similarity
                 phrase_similarity += word_similarity
-
+                
             #if the phrase has a higher similarity than the previous phrases, make it the chosen_phrase and reassign the chosen phrase value
             phrase_similarity = phrase_similarity/len(phrase)
             joined_phrase = ' '.join(phrase)
-
+            
+            #print('testing phrase value')
+            #print("--- %s seconds ---" % (time.time()- start_time))
             if phrase_similarity > first_choice_value:
                 first_choice_value = phrase_similarity
                 first_phrase_choice = joined_phrase
@@ -100,32 +115,38 @@ def phrase_voter(doc, return_dict = True):
                 third_phrase_choice = joined_phrase
             else:
                 continue
-
+        #print('adding favorite phrases to dictionary')
+        #print("--- %s seconds ---" % (time.time()- start_time))
         #adjust value of chosen phrase, or if it's not already in the dictionary, add it with its value
         if first_phrase_choice in keyphrase_votes.keys():
             keyphrase_votes[first_phrase_choice] += first_choice_value
         else:
             keyphrase_votes[first_phrase_choice] = first_choice_value
-
+            
         if second_phrase_choice in keyphrase_votes.keys():
             keyphrase_votes[second_phrase_choice] += second_choice_value
         else:
             keyphrase_votes[second_phrase_choice] = second_choice_value
-
+        
         if third_phrase_choice in keyphrase_votes.keys():
             keyphrase_votes[third_phrase_choice] += third_choice_value
         else:
             keyphrase_votes[third_phrase_choice] = third_choice_value
-
-
+        
+        #print('time for token: ', token)
+        #print("--- %s seconds ---" % (time.time()- token_start))
+        
     #once its through all of the tokens, return a sorted dictionary of the phrases and their votes
+    #print('making final dictionary')
+    #print("--- %s seconds ---" % (time.time()- start_time))
     sorted_dict = OrderedDict(sorted(keyphrase_votes.items(), key=itemgetter(1), reverse = True))
     topn_list = list(sorted_dict.items())[:10]
     topn_dict = dict(topn_list)
-
-    if return_dict == True:
-        return topn_dict
-
+    
+    
+  
+    
+    return topn_dict
 
 '''
 test = 'distance learning options'
