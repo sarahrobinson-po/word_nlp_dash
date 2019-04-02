@@ -24,7 +24,20 @@ with open('custom_stop.txt', 'rb') as f:
 #load pickle file of keyphrases list
 with open('ordered_keyphrases.txt', 'rb') as f:
     ordered_keyphrases = pickle.load(f)
+    
+#create a dictionary of keywords and synsets to be used in phrase_voter function    
+keywords = []
+synsets_dict = {}
 
+for phrase in ordered_keyphrases:
+    keywords.extend(phrase)
+
+for word in set(keywords):
+    synsets = []
+    for i, j in enumerate(wn.synsets(word)):
+        synsets.append(j)
+    synsets_dict[word] = synsets
+    
 def tokenize_only(text):
     """
     tokenize by sentence, then by word to ensure that punctuation is caught as it's own token.
